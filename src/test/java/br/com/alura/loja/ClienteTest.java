@@ -3,10 +3,7 @@ package br.com.alura.loja;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -19,16 +16,8 @@ import br.com.alura.loja.modelo.Produto;
 
 public class ClienteTest extends SuperTest {
 
-	private Client client;
-	
-	public void setUp() {
-		super.setUp();
-		client = ClientBuilder.newClient();
-	}
-	
 	@Test
 	public void testaQueBuscarUmCarrinhoTrazCarrinhoEsperado() {
-		WebTarget target = client.target("http://localhost:8080");
 		String conteudo = target.path("/carrinhos/1").request().get(String.class);
 		System.out.println(conteudo);
 		Carrinho carrinho = (Carrinho) new XStream().fromXML(conteudo);
@@ -37,9 +26,6 @@ public class ClienteTest extends SuperTest {
 	
 	@Test
 	public void testaAdicionaCarrinho() {
-		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target("http://localhost:8080");
-		
 		Carrinho carrinho = new Carrinho();
         carrinho.adiciona(new Produto(314L, "Tablet", 999, 1));
         carrinho.setRua("Rua Vergueiro");
