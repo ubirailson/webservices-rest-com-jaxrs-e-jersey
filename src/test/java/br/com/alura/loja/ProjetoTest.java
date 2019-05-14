@@ -22,4 +22,5 @@ public class ProjetoTest extends SuperTest{
 		Projeto projeto = (Projeto)new XStream().fromXML(conteudo);
 		Assert.assertEquals("Minha loja",projeto.getNome());
 	}
+
 }

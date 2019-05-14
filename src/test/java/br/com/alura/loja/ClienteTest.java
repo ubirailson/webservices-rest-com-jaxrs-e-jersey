@@ -1,6 +1,7 @@
 package br.com.alura.loja;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -18,9 +19,15 @@ import br.com.alura.loja.modelo.Produto;
 
 public class ClienteTest extends SuperTest {
 
+	private Client client;
+	
+	public void setUp() {
+		super.setUp();
+		client = ClientBuilder.newClient();
+	}
+	
 	@Test
 	public void testaQueBuscarUmCarrinhoTrazCarrinhoEsperado() {
-		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target("http://localhost:8080");
 		String conteudo = target.path("/carrinhos/1").request().get(String.class);
 		System.out.println(conteudo);
@@ -42,6 +49,9 @@ public class ClienteTest extends SuperTest {
         Entity<String> entity = Entity.entity(xml, MediaType.APPLICATION_XML);
 
         Response response = target.path("/carrinhos").request().post(entity);
-        assertEquals("<status>sucesso</status>", response.readEntity(String.class));
+        assertEquals(201, response.getStatus());
+        String location  = response.getHeaderString("Location");
+        String conteudo = client.target(location).request().get(String.class);
+        assertTrue(conteudo.contains("Tablet"));
 	}
 }
